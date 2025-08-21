@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Filosofia – Ideias que Mudaram o Mundo</title>
+  <meta name="description" content="Site educativo de filosofia com linha do tempo, filósofos, conceitos, cotações, quiz e modo claro/escuro."/>
+  <style>
+    :root {
+      --bg: #0f1221;
+      --bg-alt: #151936;
+      --text: #e9ecf1;
+      --muted: #b9c1d6;
+      --primary: #8b5cf6;
+      --primary-2: #22d3ee;
+      --card: #141831;
+      --accent: #272b4a;
+      --shadow: rgba(2, 6, 23, 0.5);
+      --success: #16a34a;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+    .light {
+      --bg: #f7f8fb;
+      --bg-alt: #ffffff;
+      --text: #0f1221;
+      --muted: #4b5563;
+      --primary: #6d28d9;
+      --primary-2: #0891b2;
+      --card: #ffffff;
+      --accent: #eef2ff;
+      --shadow: rgba(2, 6, 23, 0.1);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 800px at 80% -10%, rgba(139,92,246,.08), transparent 60%),
+                  radial-gradient(1000px 600px at -10% 20%, rgba(34,211,238,.08), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    /* Layout */
+    header {
+      position: sticky; top: 0; z-index: 50;
+      background: linear-gradient(180deg, var(--bg-alt), rgba(0,0,0,0));
+      backdrop-filter: blur(6px);
+      border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .container { max-width: 1100px; margin: 0 auto; padding: 0 1.25rem; }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .85rem 0;
+    }
+    .logo { display:flex; gap:.6rem; align-items:center; font-weight: 800; letter-spacing:.3px; }
+    .logo .mark {
+      width: 34px; height: 34px; border-radius: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-2));
+      box-shadow: 0 10px 25px var(--shadow);
+    }
+    .nav a { color: var(--text); text-decoration: none; margin: 0 .6rem; font-weight: 600; opacity:.9; }
+    .nav a:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+
+    .actions { display: flex; gap: .5rem; align-items: center; }
+    .btn {
+      appearance: none; border: 1px solid transparent; border-radius: 14px;
+      padding: .55rem .9rem; font-weight: 700; cursor: pointer; transition: .2s ease transform, .2s ease box-shadow, .2s ease background;
+    }
+    .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-2)); color: white; box-shadow: 0 8px 18px var(--shadow); }
+    .btn-ghost { background: transparent; border-color: rgba(255,255,255,.14); color: var(--text); }
+    .btn:hover { transform: translateY(-1px); }
+
+    /* Hero */
+    .hero { padding: 4rem 0 2rem; }
+    .hero-grid {
+      display: grid; grid-template-columns: 1.1fr .9fr; gap: 2rem; align-items: center;
+    }
+    .hero h1 { font-size: clamp(1.9rem, 1.1rem + 2.8vw, 3.2rem); line-height: 1.1; margin: 0; }
+    .hero p { font-size: 1.05rem; color: var(--muted); margin-top: .9rem; }
+    .hero .card {
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 18px; padding: 1rem; display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+      box-shadow: 0 10px 25px var(--shadow);
+    }
+    .stat { background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 16px; padding: 1rem; }
+    .stat b { font-size: 1.6rem; display: block; }
+
+    /* Section */
+    section { padding: 2.5rem 0; }
+    .section-title { font-size: 1.6rem; margin: 0 0 .5rem; }
+    .section-sub { color: var(--muted); margin: 0 0 1.2rem; }
+
+    /* Cards grid */
+    .grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+    .card {
+      background: var(--card); border: 1px solid rgba(255,255,255,.06); border-radius: 18px; padding: 1rem;
+      box-shadow: 0 6px 18px var(--shadow);
+    }
+    .card h3 { margin-top: .2rem; margin-bottom: .2rem; }
+    .tags { display:flex; flex-wrap: wrap; gap: .4rem; margin-top:.6rem; }
+    .tag { font-size: .75rem; background: var(--accent); color: var(--text); border-radius: 999px; padding: .15rem .55rem; border:1px solid rgba(255,255,255,.06); }
+
+    /* Timeline */
+    .timeline { border-left: 3px solid var(--accent); padding-left: 1rem; }
+    .event { margin: 0 0 1rem; }
+    .event time { font-weight: 800; color: var(--primary-2); }
+
+    /* Quote box */
+    .quote-box { display:flex; gap:1rem; align-items: start; }
+    .quote {
+      font-size: 1.1rem; background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.08); border-radius: 18px; padding: 1rem; flex:1; 
+    }
+
+    /* Accordion */
+    details { background: var(--card); border:1px solid rgba(255,255,255,.06); border-radius: 14px; padding:.8rem 1rem; }
+    details + details { margin-top:.8rem; }
+    summary { cursor: pointer; font-weight: 700; }
+
+    /* Quiz */
+    .quiz { background: var(--card); border:1px solid rgba(255,255,255,.06); border-radius: 18px; padding: 1rem; }
+    .quiz .q { margin-bottom: 1rem; }
+    .opt { display:block; margin:.35rem 0; }
+    .pill { display:inline-block; padding:.2rem .55rem; border-radius:999px; font-size:.75rem; border:1px solid rgba(255,255,255,.1); }
+
+    /* Footer */
+    footer { border-top:1px solid rgba(255,255,255,.06); padding:2rem 0; color:var(--muted); }
+
+    /* Utilities */
+    .row { display:flex; gap:.6rem; align-items:center; flex-wrap: wrap; }
+    .sp-between { display:flex; align-items:center; justify-content:space-between; gap:1rem; }
+    .muted { color: var(--muted); }
+    input[type="search"], select { background: var(--bg-alt); color: var(--text); border:1px solid rgba(255,255,255,.12); border-radius: 12px; padding: .55rem .8rem; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 640px) {
+      .grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <div class="logo" aria-label="Filosofia">
+        <div class="mark" aria-hidden="true"></div>
+        <span>Filosofia</span>
+      </div>
+      <nav aria-label="principal">
+        <a href="#filosofos">Filósofos</a>
+        <a href="#linha-do-tempo">Linha do tempo</a>
+        <a href="#conceitos">Conceitos</a>
+        <a href="#quiz">Quiz</a>
+      </nav>
+      <div class="actions">
+        <button id="toggleTheme" class="btn btn-ghost" aria-pressed="false" aria-label="Alternar tema">🌙 Tema</button>
+        <a class="btn btn-primary" href="#comece">Comece aqui</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="comece">
+      <div class="container hero-grid">
+        <div>
+          <h1>Ideias que mudaram o mundo</h1>
+          <p>Filosofia é o exercício de perguntar bem: o que é real? como viver? o que podemos conhecer? Explore pensadores, conceitos centrais, uma linha do tempo interativa e teste seu conhecimento.</p>
+          <div class="row" style="margin-top:1rem; gap:.8rem;">
+            <input id="search" type="search" placeholder="Pesquisar filósofos, correntes ou temas… (ex.: ética, razão, existência)" aria-label="Pesquisar" />
+            <select id="filterEra" aria-label="Filtrar por era">
+              <option value="">Todas as eras</option>
+              <option>Antiga</option>
+              <option>Medieval</option>
+              <option>Moderna</option>
+              <option>Contemporânea</option>
+            </select>
+          </div>
+        </div>
+        <div class="card" aria-label="Resumo do site">
+          <div class="stat" aria-live="polite"><b id="countFilosofos">7</b><span class="muted">Filósofos em destaque</span></div>
+          <div class="stat"><b>4</b><span class="muted">Grandes áreas: Metafísica, Epistemologia, Ética, Política</span></div>
+          <div class="stat"><b>8+</b><span class="muted">Conceitos essenciais</span></div>
+          <div class="stat"><b>1</b><span class="muted">Quiz rápido</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="filosofos">
+      <div class="container">
+        <h2 class="section-title">Filósofos em destaque</h2>
+        <p class="section-sub">Uma amostra de mentes que moldaram a história do pensamento.</p>
+        <div id="gridFilosofos" class="grid" role="list">
+          <!-- Cards de filósofos -->
+          <article class="card" role="listitem" data-era="Antiga" data-topics="ética maiêutica diálogo virtude" data-name="Sócrates">
+            <h3>Sócrates (c. 470–399 a.C.)</h3>
+            <p>Defendia o exame crítico da vida e o diálogo como caminho para a verdade (maiêutica). "A vida não examinada não vale a pena ser vivida."</p>
+            <div class="tags"><span class="tag">Ética</span><span class="tag">Dialética</span><span class="tag">Maiêutica</span></div>
+          </article>
+          <article class="card" role="listitem" data-era="Antiga" data-topics="ideias formas justiça política conhecimento" data-name="Platão">
+            <h3>Platão (c. 428–348 a.C.)</h3>
+            <p>Fundou a Academia. Teoria das Formas/Ideias e defesa do filósofo-rei em <em>A República</em>.</p>
+            <div class="tags"><span class="tag">Metafísica</span><span class="tag">Política</span><span class="tag">Epistemologia</span></div>
+          </article>
+          <article class="card" role="listitem" data-era="Antiga" data-topics="lógica causa virtude meio-termo biologia" data-name="Aristóteles">
+            <h3>Aristóteles (384–322 a.C.)</h3>
+            <p>Sistematizou a lógica, a ética da virtude e a busca do <em>meio-termo</em>. Enorme impacto em múltiplas áreas.</p>
+            <div class="tags"><span class="tag">Lógica</span><span class="tag">Ética</span><span class="tag">Ciência</span></div>
+          </article>
+          <article class="card" role="listitem" data-era="Moderna" data-topics="dúvida método razão mente corpo" data-name="René Descartes">
+            <h3>René Descartes (1596–1650)</h3>
+            <p>"Penso, logo existo". Método da dúvida e dualismo mente-corpo. Marco do racionalismo moderno.</p>
+            <div class="tags"><span class="tag">Epistemologia</span><span class="tag">Racionalismo</span></div>
+          </article>
+          <article class="card" role="listitem" data-era="Moderna" data-topics="imperativo categórico dever liberdade razão prática" data-name="Immanuel Kant">
+            <h3>Immanuel Kant (1724–1804)</h3>
+            <p>Propôs o imperativo categórico e uma síntese entre racionalismo e empirismo. Limites da razão.</p>
+            <div class="tags"><span class="tag">Ética</span><span class="tag">Crítica da Razão</span></div>
+          </article>
+          <article class="card" role="listitem" data-era="Contemporânea" data-topics="niilismo vontade de poder eterno retorno crítica moral" data-name="Friedrich Nietzsche">
+            <h3>Friedrich Nietzsche (1844–1900)</h3>
+            <p>Crítica à moral tradicional, vontade de poder e ideia do eterno retorno. Estilo aforístico.</p>
+            <div class="tags"><span class="tag">Crítica Moral</span><span class="tag">Estética</span></div>
+          </article>
+          <article class="card" role="listitem" data-era="Contemporânea" data-topics="existencialismo liberdade gênero ética ambiguidade" data-name="Simone de Beauvoir">
+            <h3>Simone de Beauvoir (1908–1986)</h3>
+            <p>Existencialismo e ética da ambiguidade. <em>O Segundo Sexo</em> como marco do pensamento sobre gênero e liberdade.</p>
+            <div class="tags"><span class="tag">Existencialismo</span><span class="tag">Ética</span><span class="tag">Filosofia Política</span></div>
+          </article>
+        </div>
+        <p id="noResults" class="muted" style="display:none; margin-top:.8rem;">Nenhum resultado encontrado para sua busca/filtragem.</p>
+      </div>
+    </section>
+
+    <section id="linha-do-tempo">
+      <div class="container">
+        <h2 class="section-title">Linha do tempo</h2>
+        <p class="section-sub">Um panorama simplificado de períodos filosóficos.</p>
+        <div class="timeline" aria-label="Linha do tempo da filosofia">
+          <div class="event">
+            <time>Antiguidade</time>
+            <p>Pré-socráticos, Sócrates, Platão, Aristóteles; estoicismo e epicurismo; foco em cosmologia, ética e política.</p>
+          </div>
+          <div class="event">
+            <time>Idade Média</time>
+            <p>Patrística e escolástica (Agostinho, Tomás de Aquino). Síntese entre filosofia grega e teologia.</p>
+          </div>
+          <div class="event">
+            <time>Idade Moderna</time>
+            <p>Racionalismo (Descartes, Spinoza, Leibniz) e empirismo (Locke, Hume); crítica kantiana.</p>
+          </div>
+          <div class="event">
+            <time>Contemporaneidade</time>
+            <p>Fenomenologia, existencialismo, pragmatismo, filosofia analítica e pós-estruturalismo.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="citacoes">
+      <div class="container">
+        <div class="sp-between">
+          <h2 class="section-title">Citações</h2>
+          <button id="btnQuote" class="btn btn-ghost">Gerar citação</button>
+        </div>
+        <div class="quote-box">
+          <div class="quote" id="quoteText" aria-live="polite"></div>
+        </div>
+        <p class="muted">Dica: clique em "Gerar citação" para ver frases clássicas (apenas para estudo; nem sempre a tradução é literal).</p>
+      </div>
+    </section>
+
+    <section id="conceitos">
+      <div class="container">
+        <h2 class="section-title">Conceitos essenciais</h2>
+        <p class="section-sub">Abra para ver um resumo curto.</p>
+        <details>
+          <summary>Metafísica</summary>
+          <p>Estudo do que existe e da estrutura da realidade: ser, causalidade, identidade, tempo.</p>
+        </details>
+        <details>
+          <summary>Epistemologia</summary>
+          <p>Estudo do conhecimento: crença, verdade, justificação, ceticismo e métodos de investigação.</p>
+        </details>
+        <details>
+          <summary>Ética</summary>
+          <p>Reflexão sobre o bem agir. Deontologia (dever), consequencialismo (resultados) e ética das virtudes.</p>
+        </details>
+        <details>
+          <summary>Filosofia Política</summary>
+          <p>Direitos, justiça, autoridade, liberdade e organização social.</p>
+        </details>
+        <details>
+          <summary>Estética</summary>
+          <p>Natureza do belo, da arte e da experiência estética.</p>
+        </details>
+      </div>
+    </section>
+
+    <section id="quiz">
+      <div class="container">
+        <h2 class="section-title">Quiz relâmpago</h2>
+        <p class="section-sub">5 perguntas para testar o básico.</p>
+        <form class="quiz" id="quizForm">
+          <div class="q">
+            <p><b>1</b> Quem é associado ao método da dúvida metódica?</p>
+            <label class="opt"><input type="radio" name="q1" value="Descartes" required> Descartes</label>
+            <label class="opt"><input type="radio" name="q1" value="Nietzsche"> Nietzsche</label>
+            <label class="opt"><input type="radio" name="q1" value="Aristóteles"> Aristóteles</label>
+          </div>
+          <div class="q">
+            <p><b>2</b> Para Kant, qual princípio orienta a ética?</p>
+            <label class="opt"><input type="radio" name="q2" value="Imperativo categórico" required> Imperativo categórico</label>
+            <label class="opt"><input type="radio" name="q2" value="Utilidade máxima"> Utilidade máxima</label>
+            <label class="opt"><input type="radio" name="q2" value="Prazer moderado"> Prazer moderado</label>
+          </div>
+          <div class="q">
+            <p><b>3</b> Qual filósofo escreveu <em>O Segundo Sexo</em>?</p>
+            <label class="opt"><input type="radio" name="q3" value="Simone de Beauvoir" required> Simone de Beauvoir</label>
+            <label class="opt"><input type="radio" name="q3" value="Hannah Arendt"> Hannah Arendt</label>
+            <label class="opt"><input type="radio" name="q3" value="Judith Butler"> Judith Butler</label>
+          </div>
+          <div class="q">
+            <p><b>4</b> "Penso, logo existo" está ligado a qual corrente?</p>
+            <label class="opt"><input type="radio" name="q4" value="Racionalismo" required> Racionalismo</label>
+            <label class="opt"><input type="radio" name="q4" value="Empirismo"> Empirismo</label>
+            <label class="opt"><input type="radio" name="q4" value="Ceticismo absoluto"> Ceticismo absoluto</label>
+          </div>
+          <div class="q">
+            <p><b>5</b> Para Aristóteles, a virtude é…</p>
+            <label class="opt"><input type="radio" name="q5" value="um meio-termo prudente" required> um meio-termo prudente</label>
+            <label class="opt"><input type="radio" name="q5" value="seguir regras rígidas"> seguir regras rígidas</label>
+            <label class="opt"><input type="radio" name="q5" value="buscar prazeres intensos"> buscar prazeres intensos</label>
+          </div>
+          <div class="sp-between">
+            <button class="btn btn-primary" type="submit">Enviar respostas</button>
+            <span id="quizFeedback" class="pill">Você ainda não respondeu.</span>
+          </div>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container sp-between">
+      <div>
+        <div class="logo" style="margin-bottom:.4rem;">
+          <div class="mark"></div><span>Filosofia</span>
+        </div>
+        <div class="muted">Conteúdo introdutório para fins educacionais. © <span id="year"></span></div>
+      </div>
+      <div class="muted">Feito com HTML • CSS • JS</div>
+    </div>
+  </footer>
+
+  <script>
+    // ======= Tema claro/escuro =======
+    const root = document.documentElement;
+    const toggleBtn = document.getElementById('toggleTheme');
+    const THEME_KEY = 'site-theme';
+    function setTheme(theme){
+      if(theme === 'light'){ document.body.classList.add('light'); toggleBtn.setAttribute('aria-pressed','true'); toggleBtn.textContent = '🌞 Tema'; }
+      else { document.body.classList.remove('light'); toggleBtn.setAttribute('aria-pressed','false'); toggleBtn.textContent = '🌙 Tema'; }
+      localStorage.setItem(THEME_KEY, theme);
+    }
+    const saved = localStorage.getItem(THEME_KEY);
+    setTheme(saved || (matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'));
+    toggleBtn.addEventListener('click', ()=>{
+      const isLight = document.body.classList.contains('light');
+      setTheme(isLight ? 'dark' : 'light');
+    });
+
+    // ======= Pesquisa e filtro =======
+    const search = document.getElementById('search');
+    const filterEra = document.getElementById('filterEra');
+    const grid = document.getElementById('gridFilosofos');
+    const noResults = document.getElementById('noResults');
+    const cards = Array.from(grid.querySelectorAll('[role="listitem"]'));
+
+    function applyFilters(){
+      const q = (search.value || '').toLowerCase();
+      const era = filterEra.value;
+      let visible = 0;
+      cards.forEach(card=>{
+        const text = (card.dataset.topics + ' ' + card.dataset.name).toLowerCase();
+        const matchQuery = q === '' || text.includes(q);
+        const matchEra = era === '' || card.dataset.era === era;
+        const show = matchQuery && matchEra;
+        card.style.display = show ? '' : 'none';
+        if(show) visible++;
+      });
+      noResults.style.display = visible ? 'none' : '';
+      document.getElementById('countFilosofos').textContent = visible.toString();
+    }
+    search.addEventListener('input', applyFilters);
+    filterEra.addEventListener('change', applyFilters);
+
+    // ======= Citações aleatórias =======
+    const quotes = [
+      'Só sei que nada sei. — Sócrates',
+      'O começo é a metade do todo. — Platão',
+      'A virtude é um hábito deliberado que busca o meio-termo. — Aristóteles (paráfrase)',
+      'Cogito, ergo sum. (Penso, logo existo.) — Descartes',
+      'Age apenas segundo uma máxima tal que possas ao mesmo tempo querer que ela se torne uma lei universal. — Kant (paráfrase)',
+      'Torna-te quem tu és. — Atrib. a Nietzsche',
+      'Não se nasce mulher: torna-se. — Simone de Beauvoir'
+    ];
+    const quoteBox = document.getElementById('quoteText');
+    const btnQuote = document.getElementById('btnQuote');
+    function newQuote(){
+      const q = quotes[Math.floor(Math.random()*quotes.length)];
+      quoteBox.textContent = q;
+    }
+    btnQuote.addEventListener('click', newQuote);
+    newQuote();
+
+    // ======= Quiz =======
+    const answers = {
+      q1: 'Descartes',
+      q2: 'Imperativo categórico',
+      q3: 'Simone de Beauvoir',
+      q4: 'Racionalismo',
+      q5: 'um meio-termo prudente'
+    };
+    const quizForm = document.getElementById('quizForm');
+    const quizFeedback = document.getElementById('quizFeedback');
+    quizForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const data = new FormData(quizForm);
+      let score = 0; let total = 0;
+      for(const k in answers){ total++; if(data.get(k) === answers[k]) score++; }
+      const pct = Math.round((score/total)*100);
+      quizFeedback.textContent = `Você acertou ${score}/${total} (${pct}%).`;
+      quizFeedback.style.background = pct >= 80 ? 'linear-gradient(135deg, var(--success), var(--primary-2))'
+        : pct >= 50 ? 'linear-gradient(135deg, var(--warning), var(--primary))'
+        : 'linear-gradient(135deg, var(--danger), var(--primary))';
+      quizFeedback.style.color = '#fff';
+    });
+
+    // ======= Ano no rodapé =======
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
